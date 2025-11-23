@@ -33,8 +33,7 @@ logger.info(f"Using device: {device} (CUDA available: {torch.cuda.is_available()
 try:
     model = YOLO("models/bestyolo11n_new.pt")  # Ganti path jika perlu
     model.to(device)
-    # Hilangkan model.half() untuk hindari mismatch dtype
-    # Jika ingin FP16, coba: model = YOLO("models/yolo11n.pt", torch_dtype=torch.float16)
+   
     logger.info(f"Model YOLO loaded on {device}")
 except Exception as e:
     logger.error(f"Failed to load model: {e}")
@@ -64,7 +63,7 @@ async def detect(request: ImageRequest):
         logger.error(f"Image processing error: {e}")
         return {"error": f"Failed to process image: {str(e)}"}, 400
 
-    # Inferensi YOLO (hilangkan half=... karena model.half() dihilangkan)
+    # Inferensi YOLO 
     results = model(frame, verbose=False, imgsz=640, conf=0.6)
 
     detections = []
@@ -87,7 +86,7 @@ async def detect(request: ImageRequest):
 
     return detections
 
-# Bonus: WebSocket untuk streaming real-time (kirim frame, terima detections)
+# WebSocket untuk streaming real-time (kirim frame, terima detections)
 @app.websocket("/ws/detect")
 async def websocket_detect(websocket: WebSocket):
     await websocket.accept()

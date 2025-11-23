@@ -12,7 +12,7 @@ dist/
 *.egg-info/
 
 # Model files (jangan push model besar)
-models/*.pt
+#models/*.pt
 models/*.pth
 
 # IDE
